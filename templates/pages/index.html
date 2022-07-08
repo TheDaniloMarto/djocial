@@ -5,12 +5,30 @@
 
 
 {% block content %}
-<div class="hero is-fullheight">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title">Djamplate</h1>
-      <p>This is a template repository in <a href="https://github.com/TheDaniloMarto/djamplate">GitHub</a> for fast deploy in Heroku.</p>
+
+<nav class="navbar is-danger" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item is-size-4 is-capitalized has-text-light" href="{% url 'core:index' %}">Djocial</a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a href="{% url 'accounts:logout' %}" class="qa-button-logout button is-danger is-inverted is-outlined">Logout</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</nav>
+
+
 {% endblock content %}
