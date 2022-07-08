@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load core_tags  %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+<section class="hero has-background-danger is-fullheight">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <div class="mx-2">
+
+        <div class="columns is-vcentered">
+
+          <div class="column">
+            <h1 class="title has-text-light is-uppercase">Djocial</h1>
+            <h2 class="subtitle has-text-light is-uppercase">Share your photos on World!</h2>
+          </div>
+
+          <div class="column">
+            <form action="" method="post" class="qa-form-login card">
+              <div class="card-content">
+
+                {% csrf_token %}
+
+                <div class="field">
+                  <label for={{ form.username.id_label_tag}} class="label">{{ form.username.label_tag }}</label>
+                  <div class="control">
+                    {{ form.username|addclass:"qa-form-login__username input" }}
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for={{ form.password.id_label_tag}} class="label">{{ form.password.label_tag }}</label>
+                  <div class="control">
+                    {{ form.password|addclass:"qa-form-login__password input" }}
+                  </div>
+                </div>
+
+                <input type="submit" value="Entrar" class="qa-form-login__submit my-2 button is-danger is-outlined is-fullwidth">
+
+                {% if form.errors %}
+                <div class="qa-form-errors help is-danger">
+                  {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
