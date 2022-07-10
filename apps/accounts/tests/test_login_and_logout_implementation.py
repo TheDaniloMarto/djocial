@@ -11,7 +11,7 @@ from seleniumlogin import force_login
 from webdriver_manager.firefox import GeckoDriverManager
 
 
-class TestFunctionalBase(StaticLiveServerTestCase):
+class TestBase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
@@ -27,74 +27,49 @@ class TestFunctionalBase(StaticLiveServerTestCase):
         super().tearDownClass()
 
 
-class TestLoginFunctionality(TestFunctionalBase):
-    def test_the_title_of_page(self) -> None:
-        self.driver.get(f"{self.live_server_url}/accounts/login/")
-        assert self.driver.title == "Djocial | Login"
-
-    def test_if_error_messages_appear_when_login_is_denied(self) -> None:
+class TestLogin(TestBase):
+    def setUp(self) -> None:
         self.driver.get(f"{self.live_server_url}/accounts/login/")
 
-        input_username = self.driver.find_element(
-            By.CLASS_NAME, "qa-form-login__username"
-        )
-        input_username.send_keys("user test")
-
-        input_password = self.driver.find_element(
-            By.CLASS_NAME, "qa-form-login__password"
-        )
-        input_password.send_keys("user pass")
-
-        button_butmit = self.driver.find_element(By.CLASS_NAME, "qa-form-login__submit")
-        button_butmit.click()
-
-        error_messages = WebDriverWait(self.driver, timeout=1).until(
-            lambda d: d.find_element(By.CLASS_NAME, "qa-form-errors")
-        )
-
-        assert error_messages
-
-    def test_login_successful(self) -> None:
-        datas = {
+        self.datas = {
             "username": "user test",
             "password": "pass test",
         }
 
-        User.objects.create_user(**datas)
+    def __login(self) -> None:
+        username = self.driver.find_element(By.CLASS_NAME, "qa-form-login__username")
+        username.clear()
+        username.send_keys(self.datas.get("username"))
 
-        self.driver.get(f"{self.live_server_url}/accounts/login/")
-
-        input_username = self.driver.find_element(
-            By.CLASS_NAME, "qa-form-login__username"
-        )
-        input_username.send_keys(datas.get("username"))
-
-        input_password = self.driver.find_element(
-            By.CLASS_NAME, "qa-form-login__password"
-        )
-        input_password.send_keys(datas.get("password"))
+        password = self.driver.find_element(By.CLASS_NAME, "qa-form-login__password")
+        password.clear()
+        password.send_keys(self.datas.get("password"))
 
         button_butmit = self.driver.find_element(By.CLASS_NAME, "qa-form-login__submit")
         button_butmit.click()
 
-        title = WebDriverWait(self.driver, timeout=1).until(lambda d: d.title)
+    def test_failure_login(self) -> None:
+        self.__login()
+        error_messages = WebDriverWait(self.driver, timeout=1).until(
+            lambda d: d.find_element(By.CLASS_NAME, "qa-form-errors")
+        )
+        assert error_messages
 
+    def test_successfull_login(self) -> None:
+        User.objects.create_user(**self.datas)
+        self.__login()
+        title = WebDriverWait(self.driver, timeout=1).until(lambda d: d.title)
         assert title == "Djocial | Home"
 
 
-class TestLogoutFunctionality(TestFunctionalBase):
-    def test_if_logout_button_works(self) -> None:
-
+class TestLogout(TestBase):
+    def setUp(self) -> None:
         user = User.objects.create_user(username="myuser", password="password")
         force_login(user, self.driver, self.live_server_url)
         self.driver.get(f"{self.live_server_url}/")
 
+    def test_if_logout_button_works(self) -> None:
         button_logout = self.driver.find_element(By.CLASS_NAME, "qa-button-logout")
-
-        time.sleep(2)
-
         button_logout.click()
-
         time.sleep(2)
-
         assert self.driver.title == "Djocial | Login"

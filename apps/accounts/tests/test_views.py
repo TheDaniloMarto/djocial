@@ -17,9 +17,7 @@ class TestLoginView(TestCase):
 class TestLogoutView(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
-
         cls.datas = {"username": "user test", "password": "pass test"}
-
         User.objects.create_user(**cls.datas)
 
     def setUp(self) -> None:
