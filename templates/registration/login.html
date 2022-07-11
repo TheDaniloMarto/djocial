@@ -39,6 +39,8 @@
 
                 <input type="submit" value="Entrar" class="qa-form-login__submit my-2 button is-danger is-outlined is-fullwidth">
 
+                <input type="hidden" name="next" value="{{ next }}" />
+
                 {% if form.errors %}
                 <div class="qa-form-errors help is-danger">
                   {{ form.non_field_errors }}

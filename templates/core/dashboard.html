@@ -5,11 +5,12 @@
 
 
 {% block content %}
-
 <nav class="navbar is-danger" role="navigation" aria-label="main navigation">
   <div class="container">
     <div class="navbar-brand">
-      <a class="navbar-item is-size-4 is-capitalized has-text-light" href="{% url 'core:index' %}">Djocial</a>
+      <a class="navbar-item is-size-4" href="{% url 'core:dashboard' %}">
+        Djocial
+      </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
         <span aria-hidden="true"></span>
@@ -19,16 +20,28 @@
     </div>
 
     <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item"> Dashboard </a>
+        <a class="navbar-item"> Images </a>
+        <a class="navbar-item"> People </a>
+      </div>
       <div class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
-            <a href="{% url 'accounts:logout' %}" class="qa-button-logout button is-danger is-inverted is-outlined">Logout</a>
-          </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link"> {{ request.user.username }} </a>
+
+        <div class="navbar-dropdown">
+          <a class="navbar-item">Profile</a>
+          <hr class="navbar-divider">
+          <a href="{% url 'accounts:logout' %}" class="navbar-item">Logged out</a>
         </div>
+      </div>
+
+      </div>
+
       </div>
     </div>
   </div>
 </nav>
-
 
 {% endblock content %}
