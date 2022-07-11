@@ -2,8 +2,5 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
 
-class Index(LoginRequiredMixin, TemplateView):
-    template_name = "pages/index.html"
-
-
-index = Index.as_view()
+class Dashboard(LoginRequiredMixin, TemplateView):
+    template_name = "core/dashboard.html"
